@@ -163,9 +163,9 @@ const translations: Record<Lang, Record<string, string>> = {
   },
 };
 
-// Aus "xy.mp3" wird "xy_edited.mp3"
+// z.B. "aufnahme.mp3" -> "aufnahme_edited.mp3"
 function buildEditedFileName(originalName: string): string {
-  const dotIndex = originalName.lastIndexOf('.'); // [web:554][web:563]
+  const dotIndex = originalName.lastIndexOf('.');
   if (dotIndex === -1) {
     return `${originalName}_edited`;
   }
@@ -189,18 +189,17 @@ export default function Home() {
   const [isIOS, setIsIOS] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Browser-Sprache automatisch erkennen
   useEffect(() => {
     if (typeof navigator !== 'undefined') {
       const navLangs =
         (navigator.languages && navigator.languages.length
           ? navigator.languages
-          : [navigator.language]) || []; // [web:508][web:509][web:510]
+          : [navigator.language]) || [];
 
       const normalized = navLangs
         .filter(Boolean)
         .map((l) => l.toLowerCase())
-        .map((l) => (l.includes('-') ? l.split('-')[0] : l)); // "de-DE" -> "de" [web:511][web:513]
+        .map((l) => (l.includes('-') ? l.split('-')[0] : l));
 
       const found = normalized.find((code) =>
         supportedLangs.includes(code as Lang),
@@ -213,7 +212,6 @@ export default function Home() {
     }
   }, []);
 
-  // Toast automatisch ausblenden
   useEffect(() => {
     if (!toast) return;
     const id = setTimeout(() => setToast(null), 4000);
@@ -303,9 +301,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
-      <header className="flex items-center justify-end px-4 pt-4">
-        <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 border border-slate-800 px-3 py-1 text-[11px] text-slate-300">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-indigo-950 text-slate-50 flex flex-col relative overflow-hidden">
+      {/* weicher Farb-Glow im Hintergrund */}
+      <div className="pointer-events-none absolute inset-0 opacity-40">
+        <div className="absolute -top-40 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/30 blur-3xl" />
+        <div className="absolute bottom-[-6rem] right-[-4rem] h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
+      </div>
+
+      <header className="relative z-10 flex items-center justify-end px-4 pt-4 sm:px-8">
+        <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 border border-slate-800/80 px-3 py-1 text-[11px] text-slate-300 shadow-sm shadow-slate-900/60">
           <span>Language</span>
           <select
             value={lang}
@@ -321,130 +325,133 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-4 sm:py-8">
-        <div className="w-full max-w-xl">
-          <div className="mb-6 text-center">
-            <span className="inline-flex items-center rounded-full bg-slate-900/70 border border-slate-700 px-3 py-1 text-xs font-medium text-slate-300">
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-4 sm:px-6 sm:py-10">
+        <div className="w-full max-w-xl sm:max-w-2xl lg:max-w-3xl">
+          <div className="mb-6 sm:mb-8 text-center">
+            <span className="inline-flex items-center rounded-full bg-slate-900/80 border border-slate-700/80 px-3 py-1 text-[11px] sm:text-xs font-medium text-slate-300 shadow-sm shadow-slate-900/60">
               {t('badge')}
             </span>
           </div>
 
-          <section className="bg-slate-900/80 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-sm p-6 sm:p-8 space-y-6">
-            <header className="space-y-2 text-center">
-              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
-                {t('title')}
-              </h1>
-              <p className="text-sm sm:text-base text-slate-300">
-                {t('subtitle')}
-              </p>
-              <p className="text-xs sm:text-sm text-slate-400">
-                {t('intro')}
-              </p>
-            </header>
+          {/* Card mit Gradient-Rand */}
+          <div className="rounded-3xl bg-gradient-to-br from-indigo-500/40 via-sky-500/20 to-transparent p-[1px] shadow-2xl shadow-indigo-950/60">
+            <section className="bg-slate-900/95 rounded-3xl border border-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-7">
+              <header className="space-y-2 text-center max-w-2xl mx-auto">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
+                  {t('title')}
+                </h1>
+                <p className="text-sm sm:text-base text-slate-300">
+                  {t('subtitle')}
+                </p>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  {t('intro')}
+                </p>
+              </header>
 
-            <div className="space-y-4">
-              <div className="border border-dashed border-slate-700 rounded-xl bg-slate-900/60 p-5 text-center">
-                <label className="block text-sm font-medium text-slate-200 mb-3">
-                  {t('uploadLabel')}
-                </label>
+              <div className="space-y-4 sm:space-y-5">
+                <div className="border border-dashed border-slate-700 rounded-2xl bg-slate-900/70 p-5 sm:p-6 text-center">
+                  <label className="block text-sm font-medium text-slate-200 mb-3">
+                    {t('uploadLabel')}
+                  </label>
 
-                <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow-md shadow-indigo-600/40 hover:bg-indigo-500 transition-colors"
-                  >
-                    {t('uploadButton')}
-                  </button>
-                  <span className="text-xs sm:text-sm text-slate-300 truncate max-w-[220px]">
-                    {file
-                      ? `${t('selectedFile')}: ${file.name}`
-                      : t('uploadNoFile')}
-                  </span>
+                  <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-md shadow-indigo-600/50 hover:bg-indigo-500 hover:shadow-indigo-400/60 transition-colors"
+                    >
+                      {t('uploadButton')}
+                    </button>
+                    <span className="text-xs sm:text-sm text-slate-300 truncate max-w-[240px] sm:max-w-[280px]">
+                      {file
+                        ? `${t('selectedFile')}: ${file.name}`
+                        : t('uploadNoFile')}
+                    </span>
+                  </div>
+
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="audio/*"
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+                  />
+
+                  <p className="mt-3 text-xs text-slate-400">
+                    {t('uploadHint')}
+                  </p>
+
+                  {isIOS && (
+                    <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/40 text-amber-100 text-xs rounded-lg text-left">
+                      {t('iosHint')}
+                    </div>
+                  )}
                 </div>
 
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="audio/*"
-                  className="hidden"
-                  onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                />
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span className="font-medium text-slate-200">
+                      {t('reduceLabel')}
+                    </span>
+                    <span className="font-semibold text-indigo-400">
+                      {silenceReducePercent}%
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min={70}
+                    max={95}
+                    value={silenceReducePercent}
+                    onChange={(e) => setSilenceReducePercent(Number(e.target.value))}
+                    className="w-full accent-indigo-500"
+                  />
+                  <p className="text-xs text-slate-400">
+                    {t('reduceExplanation', {
+                      percent: (keepRatio * 100).toFixed(0),
+                    })}
+                  </p>
+                </div>
 
-                <p className="mt-3 text-xs text-slate-400">
-                  {t('uploadHint')}
-                </p>
+                <div className="pt-1 sm:pt-2">
+                  <button
+                    onClick={handleUpload}
+                    disabled={!file || loading}
+                    className="w-full inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm sm:text-base font-medium text-white shadow-xl shadow-indigo-700/50 disabled:bg-slate-700 disabled:shadow-none hover:bg-indigo-500 hover:shadow-indigo-400/60 transition-colors"
+                  >
+                    {loading && (
+                      <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
+                    )}
+                    {loading ? t('buttonLoading') : t('buttonIdle')}
+                  </button>
+                </div>
 
-                {isIOS && (
-                  <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/40 text-amber-100 text-xs rounded-lg text-left">
-                    {t('iosHint')}
+                {error && (
+                  <div className="mt-1 p-3 rounded-lg bg-red-500/10 border border-red-500/40 text-xs text-red-100">
+                    {error}
+                  </div>
+                )}
+
+                {downloadUrl && (
+                  <div className="mt-2 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/40">
+                    <p className="mb-2 text-sm text-emerald-100">
+                      {t('successTitle')}
+                    </p>
+                    <a
+                      href={downloadUrl}
+                      download={outputFileName}
+                      className="inline-flex items-center text-sm font-medium text-emerald-200 hover:text-emerald-100 underline-offset-2 hover:underline"
+                    >
+                      {t('successLink')}
+                    </a>
                   </div>
                 )}
               </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs sm:text-sm">
-                  <span className="font-medium text-slate-200">
-                    {t('reduceLabel')}
-                  </span>
-                  <span className="font-semibold text-indigo-400">
-                    {silenceReducePercent}%
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={70}
-                  max={95}
-                  value={silenceReducePercent}
-                  onChange={(e) => setSilenceReducePercent(Number(e.target.value))}
-                  className="w-full accent-indigo-500"
-                />
-                <p className="text-xs text-slate-400">
-                  {t('reduceExplanation', {
-                    percent: (keepRatio * 100).toFixed(0),
-                  })}
-                </p>
-              </div>
-
-              <div className="pt-2">
-                <button
-                  onClick={handleUpload}
-                  disabled={!file || loading}
-                  className="w-full inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-600/30 disabled:bg-slate-700 disabled:shadow-none hover:bg-indigo-500 transition-colors"
-                >
-                  {loading && (
-                    <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
-                  )}
-                  {loading ? t('buttonLoading') : t('buttonIdle')}
-                </button>
-              </div>
-
-              {error && (
-                <div className="mt-2 p-3 rounded-lg bg-red-500/10 border border-red-500/40 text-xs text-red-100">
-                  {error}
-                </div>
-              )}
-
-              {downloadUrl && (
-                <div className="mt-3 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/40">
-                  <p className="mb-2 text-sm text-emerald-100">
-                    {t('successTitle')}
-                  </p>
-                  <a
-                    href={downloadUrl}
-                    download={outputFileName}
-                    className="inline-flex items-center text-sm font-medium text-emerald-200 hover:text-emerald-100 underline-offset-2 hover:underline"
-                  >
-                    {t('successLink')}
-                  </a>
-                </div>
-              )}
-            </div>
-          </section>
+            </section>
+          </div>
         </div>
       </main>
 
-      <footer className="px-6 pb-4 pt-2 text-[11px] text-slate-500 flex items-center justify-between border-t border-slate-900/80 bg-slate-950/90">
+      <footer className="relative z-10 px-4 sm:px-8 pb-4 sm:pb-5 pt-2 text-[11px] text-slate-500 flex items-center justify-between border-t border-slate-900/80 bg-slate-950/80 backdrop-blur-sm">
         <span>© {new Date().getFullYear()} Audio Silence Remover</span>
         <div className="space-x-4">
           <a href="/impressum" className="hover:text-slate-300 transition-colors">
