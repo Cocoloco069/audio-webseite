@@ -163,6 +163,17 @@ const translations: Record<Lang, Record<string, string>> = {
   },
 };
 
+// Aus "xy.mp3" wird "xy_edited.mp3"
+function buildEditedFileName(originalName: string): string {
+  const dotIndex = originalName.lastIndexOf('.'); // [web:554][web:563]
+  if (dotIndex === -1) {
+    return `${originalName}_edited`;
+  }
+  const base = originalName.substring(0, dotIndex);
+  const ext = originalName.substring(dotIndex);
+  return `${base}_edited${ext}`;
+}
+
 export default function Home() {
   const [lang, setLang] = useState<Lang>('de');
   const [file, setFile] = useState<File | null>(null);
@@ -170,6 +181,7 @@ export default function Home() {
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<ToastState>(null);
+  const [outputFileName, setOutputFileName] = useState<string>('edited.mp3');
 
   const [silenceReducePercent, setSilenceReducePercent] = useState(85);
   const keepRatio = (100 - silenceReducePercent) / 100;
@@ -183,12 +195,12 @@ export default function Home() {
       const navLangs =
         (navigator.languages && navigator.languages.length
           ? navigator.languages
-          : [navigator.language]) || [];
+          : [navigator.language]) || []; // [web:508][web:509][web:510]
 
       const normalized = navLangs
         .filter(Boolean)
         .map((l) => l.toLowerCase())
-        .map((l) => (l.includes('-') ? l.split('-')[0] : l));
+        .map((l) => (l.includes('-') ? l.split('-')[0] : l)); // "de-DE" -> "de" [web:511][web:513]
 
       const found = normalized.find((code) =>
         supportedLangs.includes(code as Lang),
@@ -201,7 +213,7 @@ export default function Home() {
     }
   }, []);
 
-  // Toast automatisch nach ein paar Sekunden ausblenden
+  // Toast automatisch ausblenden
   useEffect(() => {
     if (!toast) return;
     const id = setTimeout(() => setToast(null), 4000);
@@ -242,8 +254,8 @@ export default function Home() {
       }
 
       const blob = await response.blob();
-      const downloadUrl = window.URL.createObjectURL(blob);
-      setDownloadUrl(downloadUrl);
+      const urlObject = window.URL.createObjectURL(blob);
+      setDownloadUrl(urlObject);
       setToast({ type: 'success', message: t('successTitle') });
     } catch (e: any) {
       console.error(e);
@@ -287,6 +299,7 @@ export default function Home() {
     }
 
     setFile(selected);
+    setOutputFileName(buildEditedFileName(selected.name));
   };
 
   return (
@@ -335,7 +348,6 @@ export default function Home() {
                   {t('uploadLabel')}
                 </label>
 
-                {/* Custom Upload Button */}
                 <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3">
                   <button
                     type="button"
@@ -351,7 +363,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Hidden native file input */}
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -421,7 +432,7 @@ export default function Home() {
                   </p>
                   <a
                     href={downloadUrl}
-                    download="bearbeitet.mp3"
+                    download={outputFileName}
                     className="inline-flex items-center text-sm font-medium text-emerald-200 hover:text-emerald-100 underline-offset-2 hover:underline"
                   >
                     {t('successLink')}
@@ -445,7 +456,6 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* Toast-Notification unten rechts */}
       {toast && (
         <div className="fixed bottom-4 right-4 z-50">
           <div
