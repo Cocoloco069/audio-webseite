@@ -6,6 +6,7 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
 
 type Lang = 'de' | 'en' | 'es' | 'fr' | 'it';
+type ToastState = { message: string; type: 'success' | 'error' } | null;
 
 const supportedLangs: Lang[] = ['de', 'en', 'es', 'fr', 'it'];
 
@@ -168,6 +169,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<ToastState>(null);
 
   const [silenceReducePercent, setSilenceReducePercent] = useState(85);
   const keepRatio = (100 - silenceReducePercent) / 100;
@@ -181,12 +183,12 @@ export default function Home() {
       const navLangs =
         (navigator.languages && navigator.languages.length
           ? navigator.languages
-          : [navigator.language]) || []; // [web:508][web:509][web:510]
+          : [navigator.language]) || [];
 
       const normalized = navLangs
         .filter(Boolean)
         .map((l) => l.toLowerCase())
-        .map((l) => (l.includes('-') ? l.split('-')[0] : l)); // "de-DE" -> "de" [web:511][web:513]
+        .map((l) => (l.includes('-') ? l.split('-')[0] : l));
 
       const found = normalized.find((code) =>
         supportedLangs.includes(code as Lang),
@@ -198,6 +200,13 @@ export default function Home() {
       setIsIOS(/iPad|iPhone|iPod/.test(ua));
     }
   }, []);
+
+  // Toast automatisch nach ein paar Sekunden ausblenden
+  useEffect(() => {
+    if (!toast) return;
+    const id = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(id);
+  }, [toast]);
 
   const t = (key: keyof typeof translations.de, vars?: Record<string, string>) => {
     let text = translations[lang][key];
@@ -235,9 +244,12 @@ export default function Home() {
       const blob = await response.blob();
       const downloadUrl = window.URL.createObjectURL(blob);
       setDownloadUrl(downloadUrl);
+      setToast({ type: 'success', message: t('successTitle') });
     } catch (e: any) {
       console.error(e);
-      setError(e.message || t('errorGeneric'));
+      const msg = e.message || t('errorGeneric');
+      setError(msg);
+      setToast({ type: 'error', message: msg });
     } finally {
       setLoading(false);
     }
@@ -254,7 +266,9 @@ export default function Home() {
 
     if (!selected.type.startsWith('audio/')) {
       setFile(null);
-      setError(t('errorNotAudio'));
+      const msg = t('errorNotAudio');
+      setError(msg);
+      setToast({ type: 'error', message: msg });
       return;
     }
 
@@ -263,12 +277,12 @@ export default function Home() {
 
     if (sizeMb > maxSizeMb) {
       setFile(null);
-      setError(
-        t('errorTooBig', {
-          size: sizeMb.toFixed(1),
-          max: String(maxSizeMb),
-        }),
-      );
+      const msg = t('errorTooBig', {
+        size: sizeMb.toFixed(1),
+        max: String(maxSizeMb),
+      });
+      setError(msg);
+      setToast({ type: 'error', message: msg });
       return;
     }
 
@@ -337,7 +351,7 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* Verstecktes natives File-Input (keine deutsche Browser-Beschriftung sichtbar) */}
+                {/* Hidden native file input */}
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -387,6 +401,9 @@ export default function Home() {
                   disabled={!file || loading}
                   className="w-full inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-600/30 disabled:bg-slate-700 disabled:shadow-none hover:bg-indigo-500 transition-colors"
                 >
+                  {loading && (
+                    <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-transparent" />
+                  )}
                   {loading ? t('buttonLoading') : t('buttonIdle')}
                 </button>
               </div>
@@ -427,6 +444,21 @@ export default function Home() {
           </a>
         </div>
       </footer>
+
+      {/* Toast-Notification unten rechts */}
+      {toast && (
+        <div className="fixed bottom-4 right-4 z-50">
+          <div
+            className={`max-w-xs rounded-lg px-4 py-3 text-xs shadow-lg border ${
+              toast.type === 'success'
+                ? 'bg-emerald-500/90 border-emerald-300 text-emerald-950'
+                : 'bg-red-500/90 border-red-300 text-red-950'
+            }`}
+          >
+            {toast.message}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
