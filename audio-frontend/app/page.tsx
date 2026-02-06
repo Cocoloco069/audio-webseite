@@ -62,135 +62,162 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-8 max-w-2xl mx-auto flex flex-col">
-      <div className="flex-1">
-        <h1 className="text-3xl font-bold mb-2">🎙️ Audio Silence Remover</h1>
-        <p className="mb-2 text-gray-600">
-          Dieses Tool kürzt automatisch stille Passagen aus deinen Sprachaufnahmen – ideal für
-          Podcasts, Voice-Overs oder Interviews.
-        </p>
-        <p className="mb-6 text-gray-500 text-sm">
-          Lade eine Audiodatei hoch, stelle ein, wie stark Pausen gekürzt werden sollen, und lade
-          die bearbeitete Datei direkt wieder herunter.
-        </p>
+    <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+      <main className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-xl">
+          <div className="mb-6 text-center">
+            <span className="inline-flex items-center rounded-full bg-slate-900/70 border border-slate-700 px-3 py-1 text-xs font-medium text-slate-300">
+              🎧 AI Audio Tool
+            </span>
+          </div>
 
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-4 text-center">
-          <input
-            type="file"
-            accept="audio/*"
-            onChange={(e) => {
-              const selected = e.target.files?.[0] || null;
-              setDownloadUrl(null);
-              setError(null);
+          <section className="bg-slate-900/80 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-sm p-6 sm:p-8 space-y-6">
+            <header className="space-y-2 text-center">
+              <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+                Audio Silence Remover
+              </h1>
+              <p className="text-sm sm:text-base text-slate-300">
+                Entferne automatisch störende Pausen aus Sprachaufnahmen – ideal für Podcasts,
+                Voice-Overs und Interviews.
+              </p>
+            </header>
 
-              if (!selected) {
-                setFile(null);
-                return;
-              }
+            <div className="space-y-4">
+              <div className="border border-dashed border-slate-700 rounded-xl bg-slate-900/60 p-5 text-center">
+                <label className="block text-sm font-medium text-slate-200 mb-2">
+                  Audiodatei hochladen
+                </label>
+                <input
+                  type="file"
+                  accept="audio/*"
+                  className="mx-auto block text-sm file:mr-4 file:rounded-full file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-indigo-500 cursor-pointer"
+                  onChange={(e) => {
+                    const selected = e.target.files?.[0] || null;
+                    setDownloadUrl(null);
+                    setError(null);
 
-              // Nur echte Audio-Dateien erlauben (per MIME-Typ)
-              if (!selected.type.startsWith('audio/')) {
-                setFile(null);
-                setError(
-                  'Nur Audiodateien sind erlaubt. Bitte wähle eine Datei im Format mp3, wav, m4a o.Ä.',
-                );
-                return;
-              }
+                    if (!selected) {
+                      setFile(null);
+                      return;
+                    }
 
-              const maxSizeMb = 50;
-              const sizeMb = selected.size / (1024 * 1024); // Bytes -> MB
+                    if (!selected.type.startsWith('audio/')) {
+                      setFile(null);
+                      setError(
+                        'Nur Audiodateien sind erlaubt. Bitte wähle eine Datei im Format mp3, wav, m4a o.Ä.',
+                      );
+                      return;
+                    }
 
-              if (sizeMb > maxSizeMb) {
-                setFile(null);
-                setError(
-                  `Die Datei ist zu groß (${sizeMb.toFixed(
-                    1,
-                  )} MB). Maximal erlaubt sind ${maxSizeMb} MB.`,
-                );
-                return;
-              }
+                    const maxSizeMb = 50;
+                    const sizeMb = selected.size / (1024 * 1024);
 
-              setFile(selected);
-            }}
-          />
-          {file && (
-            <p className="mt-2 text-sm text-gray-600">
-              Ausgewählt: {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-            </p>
-          )}
-          <p className="mt-2 text-xs text-gray-500">
-            Es werden ausschließlich Audiodateien akzeptiert (z.&nbsp;B. mp3, wav, m4a).
-            Maximale Dateigröße: 50&nbsp;MB.
-          </p>
+                    if (sizeMb > maxSizeMb) {
+                      setFile(null);
+                      setError(
+                        `Die Datei ist zu groß (${sizeMb.toFixed(
+                          1,
+                        )} MB). Maximal erlaubt sind ${maxSizeMb} MB.`,
+                      );
+                      return;
+                    }
 
-          {isIOS && (
-            <div className="mt-3 p-3 bg-yellow-50 text-xs text-yellow-800 rounded text-left">
-              Hinweis für iPhone/iPad:
-              iOS zeigt im Datei-Auswahldialog oft auch die Kamera bzw. Videoaufnahme an.
-              Bitte nimm Audio z.&nbsp;B. mit der Sprachmemos-App auf und wähle die fertige
-              Audiodatei hier aus – Videoaufnahmen werden vom Tool abgelehnt.
+                    setFile(selected);
+                  }}
+                />
+
+                {file && (
+                  <p className="mt-3 text-xs sm:text-sm text-slate-300">
+                    Ausgewählt: <span className="font-medium">{file.name}</span>{' '}
+                    ({(file.size / (1024 * 1024)).toFixed(2)} MB)
+                  </p>
+                )}
+
+                <p className="mt-3 text-xs text-slate-400">
+                  Es werden ausschließlich Audiodateien akzeptiert (z.&nbsp;B. mp3, wav, m4a).
+                  Maximale Dateigröße: 50&nbsp;MB.
+                </p>
+
+                {isIOS && (
+                  <div className="mt-3 p-3 bg-amber-500/10 border border-amber-500/40 text-amber-100 text-xs rounded-lg text-left">
+                    Hinweis für iPhone/iPad:
+                    iOS zeigt im Datei-Auswahldialog oft auch die Kamera bzw. Videoaufnahme an.
+                    Bitte nimm Audio z.&nbsp;B. mit der Sprachmemos-App auf und wähle die fertige
+                    Audiodatei hier aus – Videoaufnahmen werden abgelehnt.
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs sm:text-sm">
+                  <span className="font-medium text-slate-200">Stille reduzieren</span>
+                  <span className="font-semibold text-indigo-400">
+                    {silenceReducePercent}%
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={70}
+                  max={95}
+                  value={silenceReducePercent}
+                  onChange={(e) => setSilenceReducePercent(Number(e.target.value))}
+                  className="w-full accent-indigo-500"
+                />
+                <p className="text-xs text-slate-400">
+                  70% = sehr vorsichtig, 95% = sehr aggressiv. Aktuell bleiben etwa{' '}
+                  <span className="font-medium text-slate-200">
+                    {(keepRatio * 100).toFixed(0)}%
+                  </span>{' '}
+                  der ursprünglichen Pausen erhalten.
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={handleUpload}
+                  disabled={!file || loading}
+                  className="w-full inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white shadow-lg shadow-indigo-600/30 disabled:bg-slate-700 disabled:shadow-none hover:bg-indigo-500 transition-colors"
+                >
+                  {loading ? 'Verarbeite...' : 'Stille jetzt kürzen'}
+                </button>
+              </div>
+
+              {error && (
+                <div className="mt-2 p-3 rounded-lg bg-red-500/10 border border-red-500/40 text-xs text-red-100">
+                  {error}
+                </div>
+              )}
+
+              {downloadUrl && (
+                <div className="mt-3 p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/40">
+                  <p className="mb-2 text-sm text-emerald-100">
+                    ✅ Fertig! Deine Audiodatei wurde verarbeitet.
+                  </p>
+                  <a
+                    href={downloadUrl}
+                    download="bearbeitet.mp3"
+                    className="inline-flex items-center text-sm font-medium text-emerald-200 hover:text-emerald-100 underline-offset-2 hover:underline"
+                  >
+                    Bearbeitete Datei herunterladen
+                  </a>
+                </div>
+              )}
             </div>
-          )}
+          </section>
         </div>
+      </main>
 
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">
-            Stille reduzieren:{' '}
-            <span className="font-bold">{silenceReducePercent}%</span>
-          </label>
-          <input
-            type="range"
-            min={70}
-            max={95}
-            value={silenceReducePercent}
-            onChange={(e) => setSilenceReducePercent(Number(e.target.value))}
-            className="w-full"
-          />
-          <p className="text-xs text-gray-500 mt-1">
-            70% = sehr vorsichtig, 95% = sehr aggressiv. Aktuell bleiben etwa{' '}
-            {(keepRatio * 100).toFixed(0)}% der ursprünglichen Pausen erhalten.
-          </p>
-        </div>
-
-        <button
-          onClick={handleUpload}
-          disabled={!file || loading}
-          className="bg-blue-600 text-white px-6 py-2 rounded disabled:bg-gray-400"
-        >
-          {loading ? 'Verarbeite...' : 'Stille jetzt kürzen'}
-        </button>
-
-        {error && (
-          <div className="mt-4 p-3 bg-red-100 text-red-700 rounded text-sm">
-            {error}
-          </div>
-        )}
-
-        {downloadUrl && (
-          <div className="mt-6 p-4 bg-green-100 rounded">
-            <p className="mb-2">✅ Fertig! Datei wurde verarbeitet.</p>
-            <a
-              href={downloadUrl}
-              download="bearbeitet.mp3"
-              className="text-blue-600 underline"
-            >
-              Bearbeitete Datei herunterladen
-            </a>
-          </div>
-        )}
-      </div>
-
-      <footer className="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-500 flex justify-between">
+      <footer className="px-6 pb-4 pt-2 text-[11px] text-slate-500 flex items-center justify-between border-t border-slate-900/80 bg-slate-950/90">
         <span>© {new Date().getFullYear()} Audio Silence Remover</span>
         <div className="space-x-4">
-          <a href="/impressum" className="hover:underline">
+          <a href="/impressum" className="hover:text-slate-300 transition-colors">
             Impressum
           </a>
-          <a href="/datenschutz" className="hover:underline">
+          <a href="/datenschutz" className="hover:text-slate-300 transition-colors">
             Datenschutz
           </a>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }
