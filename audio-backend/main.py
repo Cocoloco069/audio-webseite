@@ -8,14 +8,14 @@ from silence_remover import reduce_silence  # <- deine Funktion aus silence_remo
 
 app = FastAPI(title="Audio Silence Remover API")
 
-# ----- CORS für dein Next.js-Frontend -----
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Frontend-URL
+    allow_origins=["*"],  # MVP: alles erlauben, später einschränken
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # Temporärer Ordner für Uploads/Ergebnisse
 TEMP_DIR = tempfile.gettempdir()
