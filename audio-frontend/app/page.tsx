@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
@@ -16,6 +16,16 @@ export default function Home() {
 
   // Daraus wird keep_ratio fürs Backend berechnet (z.B. 85% entfernen -> 0.15 bleibt)
   const keepRatio = (100 - silenceReducePercent) / 100;
+
+  // Einfaches Flag, ob der User iOS (iPhone/iPad) nutzt
+  const [isIOS, setIsIOS] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined') {
+      const ua = navigator.userAgent || '';
+      setIsIOS(/iPad|iPhone|iPod/.test(ua));
+    }
+  }, []);
 
   const handleUpload = async () => {
     if (!file) return;
@@ -82,7 +92,7 @@ export default function Home() {
               if (!selected.type.startsWith('audio/')) {
                 setFile(null);
                 setError(
-                  'Nur Audiodateien sind erlaubt. Bitte wähle eine Datei im Format mp3, wav, m4a o.Ä.'
+                  'Nur Audiodateien sind erlaubt. Bitte wähle eine Datei im Format mp3, wav, m4a o.Ä.',
                 );
                 return;
               }
@@ -109,9 +119,18 @@ export default function Home() {
             </p>
           )}
           <p className="mt-2 text-xs text-gray-500">
-            Es werden ausschließlich Audiodateien akzeptiert (z.&nbsp;B. mp3, wav, m4a). Maximale
-            Dateigröße: 50&nbsp;MB.
+            Es werden ausschließlich Audiodateien akzeptiert (z.&nbsp;B. mp3, wav, m4a).
+            Maximale Dateigröße: 50&nbsp;MB.
           </p>
+
+          {isIOS && (
+            <div className="mt-3 p-3 bg-yellow-50 text-xs text-yellow-800 rounded text-left">
+              Hinweis für iPhone/iPad:
+              iOS zeigt im Datei-Auswahldialog oft auch die Kamera bzw. Videoaufnahme an.
+              Bitte nimm Audio z.&nbsp;B. mit der Sprachmemos-App auf und wähle die fertige
+              Audiodatei hier aus – Videoaufnahmen werden vom Tool abgelehnt.
+            </div>
+          )}
         </div>
 
         <div className="mb-6">
