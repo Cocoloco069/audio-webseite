@@ -1,0 +1,25 @@
+﻿# Python / Backend
+audio_env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# FastAPI/Logs
+*.log
+
+# Next.js / Node
+audio-frontend/node_modules/
+audio-frontend/.next/
+audio-frontend/out/
+audio-frontend/.turbo/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env / Secrets (für später)
+.env
+.env.*
