@@ -69,9 +69,38 @@ export default function Home() {
             type="file"
             accept="audio/*"
             onChange={(e) => {
-              setFile(e.target.files?.[0] || null);
+              const selected = e.target.files?.[0] || null;
               setDownloadUrl(null);
               setError(null);
+
+              if (!selected) {
+                setFile(null);
+                return;
+              }
+
+              // Nur echte Audio-Dateien erlauben (per MIME-Typ)
+              if (!selected.type.startsWith('audio/')) {
+                setFile(null);
+                setError(
+                  'Nur Audiodateien sind erlaubt. Bitte wähle eine Datei im Format mp3, wav, m4a o.Ä.'
+                );
+                return;
+              }
+
+              const maxSizeMb = 50;
+              const sizeMb = selected.size / (1024 * 1024); // Bytes -> MB
+
+              if (sizeMb > maxSizeMb) {
+                setFile(null);
+                setError(
+                  `Die Datei ist zu groß (${sizeMb.toFixed(
+                    1,
+                  )} MB). Maximal erlaubt sind ${maxSizeMb} MB.`,
+                );
+                return;
+              }
+
+              setFile(selected);
             }}
           />
           {file && (
@@ -80,8 +109,8 @@ export default function Home() {
             </p>
           )}
           <p className="mt-2 text-xs text-gray-500">
-            Unterstützte Formate hängen vom Backend ab (z.&nbsp;B. mp3, wav, m4a). Für beste
-            Ergebnisse verwende bitte Dateien bis ca. 50&nbsp;MB.
+            Es werden ausschließlich Audiodateien akzeptiert (z.&nbsp;B. mp3, wav, m4a). Maximale
+            Dateigröße: 50&nbsp;MB.
           </p>
         </div>
 
