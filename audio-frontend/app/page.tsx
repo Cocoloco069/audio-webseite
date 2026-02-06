@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
@@ -18,6 +18,8 @@ const translations: Record<Lang, Record<string, string>> = {
     intro:
       'Lade eine Audiodatei hoch, stelle ein, wie stark Pausen gekürzt werden sollen, und lade die bearbeitete Datei direkt wieder herunter.',
     uploadLabel: 'Audiodatei hochladen',
+    uploadButton: 'Datei auswählen',
+    uploadNoFile: 'Keine Datei ausgewählt',
     uploadHint:
       'Es werden ausschließlich Audiodateien akzeptiert (z. B. mp3, wav, m4a). Maximale Dateigröße: 50 MB.',
     iosHint:
@@ -46,6 +48,8 @@ const translations: Record<Lang, Record<string, string>> = {
     intro:
       'Upload an audio file, choose how aggressively silence should be reduced and download the processed file.',
     uploadLabel: 'Upload audio file',
+    uploadButton: 'Choose file',
+    uploadNoFile: 'No file selected',
     uploadHint:
       'Only audio files are accepted (e.g. mp3, wav, m4a). Maximum file size: 50 MB.',
     iosHint:
@@ -74,6 +78,8 @@ const translations: Record<Lang, Record<string, string>> = {
     intro:
       'Sube un archivo de audio, elige qué tan agresivamente se debe reducir el silencio y descarga el archivo procesado.',
     uploadLabel: 'Subir archivo de audio',
+    uploadButton: 'Elegir archivo',
+    uploadNoFile: 'Ningún archivo seleccionado',
     uploadHint:
       'Solo se aceptan archivos de audio (p. ej. mp3, wav, m4a). Tamaño máximo: 50 MB.',
     iosHint:
@@ -102,6 +108,8 @@ const translations: Record<Lang, Record<string, string>> = {
     intro:
       'Télécharge un fichier audio, choisis à quel point les silences doivent être réduits puis télécharge le fichier traité.',
     uploadLabel: 'Télécharger un fichier audio',
+    uploadButton: 'Choisir un fichier',
+    uploadNoFile: 'Aucun fichier sélectionné',
     uploadHint:
       'Seuls les fichiers audio sont acceptés (ex. mp3, wav, m4a). Taille maximale : 50 Mo.',
     iosHint:
@@ -117,8 +125,7 @@ const translations: Record<Lang, Record<string, string>> = {
     errorTooBig:
       'Le fichier est trop volumineux ({size} Mo). La taille maximale autorisée est {max} Mo.',
     errorGeneric: 'La connexion au serveur a échoué.',
-    successTitle:
-      '✅ Terminé ! Ton fichier audio a été traité.',
+    successTitle: '✅ Terminé ! Ton fichier audio a été traité.',
     successLink: 'Télécharger le fichier traité',
     footerImprint: 'Mentions légales',
     footerPrivacy: 'Confidentialité',
@@ -131,6 +138,8 @@ const translations: Record<Lang, Record<string, string>> = {
     intro:
       'Carica un file audio, scegli quanto in modo aggressivo ridurre il silenzio e scarica il file elaborato.',
     uploadLabel: 'Carica file audio',
+    uploadButton: 'Scegli file',
+    uploadNoFile: 'Nessun file selezionato',
     uploadHint:
       'Sono accettati solo file audio (es. mp3, wav, m4a). Dimensione massima: 50 MB.',
     iosHint:
@@ -146,8 +155,7 @@ const translations: Record<Lang, Record<string, string>> = {
     errorTooBig:
       'Il file è troppo grande ({size} MB). La dimensione massima consentita è {max} MB.',
     errorGeneric: 'Connessione al server non riuscita.',
-    successTitle:
-      '✅ Fatto! Il tuo file audio è stato elaborato.',
+    successTitle: '✅ Fatto! Il tuo file audio è stato elaborato.',
     successLink: 'Scarica il file elaborato',
     footerImprint: 'Note legali',
     footerPrivacy: 'Privacy',
@@ -165,11 +173,11 @@ export default function Home() {
   const keepRatio = (100 - silenceReducePercent) / 100;
 
   const [isIOS, setIsIOS] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Browser-Sprache automatisch erkennen und auf unterstützte Sprachen mappen
+  // Browser-Sprache automatisch erkennen
   useEffect(() => {
     if (typeof navigator !== 'undefined') {
-      // bevorzugte Sprachenliste auslesen
       const navLangs =
         (navigator.languages && navigator.languages.length
           ? navigator.languages
@@ -184,11 +192,7 @@ export default function Home() {
         supportedLangs.includes(code as Lang),
       );
 
-      if (found) {
-        setLang(found as Lang);
-      } else {
-        setLang('en'); // Fallback
-      }
+      setLang((found as Lang) || 'en');
 
       const ua = navigator.userAgent || '';
       setIsIOS(/iPad|iPhone|iPod/.test(ua));
@@ -239,6 +243,38 @@ export default function Home() {
     }
   };
 
+  const handleFileChange = (selected: File | null) => {
+    setDownloadUrl(null);
+    setError(null);
+
+    if (!selected) {
+      setFile(null);
+      return;
+    }
+
+    if (!selected.type.startsWith('audio/')) {
+      setFile(null);
+      setError(t('errorNotAudio'));
+      return;
+    }
+
+    const maxSizeMb = 50;
+    const sizeMb = selected.size / (1024 * 1024);
+
+    if (sizeMb > maxSizeMb) {
+      setFile(null);
+      setError(
+        t('errorTooBig', {
+          size: sizeMb.toFixed(1),
+          max: String(maxSizeMb),
+        }),
+      );
+      return;
+    }
+
+    setFile(selected);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
       <header className="flex items-center justify-end px-4 pt-4">
@@ -281,53 +317,34 @@ export default function Home() {
 
             <div className="space-y-4">
               <div className="border border-dashed border-slate-700 rounded-xl bg-slate-900/60 p-5 text-center">
-                <label className="block text-sm font-medium text-slate-200 mb-2">
+                <label className="block text-sm font-medium text-slate-200 mb-3">
                   {t('uploadLabel')}
                 </label>
+
+                {/* Custom Upload Button */}
+                <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-2 text-sm font-medium text-white shadow-md shadow-indigo-600/40 hover:bg-indigo-500 transition-colors"
+                  >
+                    {t('uploadButton')}
+                  </button>
+                  <span className="text-xs sm:text-sm text-slate-300 truncate max-w-[220px]">
+                    {file
+                      ? `${t('selectedFile')}: ${file.name}`
+                      : t('uploadNoFile')}
+                  </span>
+                </div>
+
+                {/* Verstecktes natives File-Input (keine deutsche Browser-Beschriftung sichtbar) */}
                 <input
+                  ref={fileInputRef}
                   type="file"
                   accept="audio/*"
-                  className="mx-auto block text-sm file:mr-4 file:rounded-full file:border-0 file:bg-indigo-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-indigo-500 cursor-pointer"
-                  onChange={(e) => {
-                    const selected = e.target.files?.[0] || null;
-                    setDownloadUrl(null);
-                    setError(null);
-
-                    if (!selected) {
-                      setFile(null);
-                      return;
-                    }
-
-                    if (!selected.type.startsWith('audio/')) {
-                      setFile(null);
-                      setError(t('errorNotAudio'));
-                      return;
-                    }
-
-                    const maxSizeMb = 50;
-                    const sizeMb = selected.size / (1024 * 1024);
-
-                    if (sizeMb > maxSizeMb) {
-                      setFile(null);
-                      setError(
-                        t('errorTooBig', {
-                          size: sizeMb.toFixed(1),
-                          max: String(maxSizeMb),
-                        }),
-                      );
-                      return;
-                    }
-
-                    setFile(selected);
-                  }}
+                  className="hidden"
+                  onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
                 />
-
-                {file && (
-                  <p className="mt-3 text-xs sm:text-sm text-slate-300">
-                    {t('selectedFile')}: <span className="font-medium">{file.name}</span>{' '}
-                    ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-                  </p>
-                )}
 
                 <p className="mt-3 text-xs text-slate-400">
                   {t('uploadHint')}
