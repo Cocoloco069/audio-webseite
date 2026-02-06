@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,7 +28,7 @@ export default function Home() {
     formData.append('file', file);
 
     try {
-      const url = `http://localhost:8000/process?keep_ratio=${keepRatio}&silence_thresh=-40&min_silence_len=500`;
+      const url = `${API_BASE_URL}/process?keep_ratio=${keepRatio}&silence_thresh=-40&min_silence_len=500`;
 
       const response = await fetch(url, {
         method: 'POST',
