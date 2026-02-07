@@ -17,7 +17,7 @@ export default function BrandHeader({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="relative z-10 px-4 pt-4 sm:px-8 sm:pt-6">
+    <header className="sticky top-0 z-20 px-4 pt-3 pb-2 sm:px-8 sm:pt-4 bg-slate-950/90 backdrop-blur-md border-b border-slate-900/80">
       <div className="flex flex-col gap-3 sm:gap-4">
         {/* Zeile 1: Brand + Language (Desktop rechts) */}
         <div className="flex items-center justify-between gap-3">
@@ -28,7 +28,7 @@ export default function BrandHeader({
             <span className="tracking-tight">Audio Tools</span>
           </div>
 
-          {/* Desktop: Language rechts, Mobil: versteckt (kommt unten zentriert) */}
+          {/* Desktop: Language rechts */}
           <div className="hidden sm:flex justify-end">
             <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 border border-slate-800/80 px-2.5 py-1 text-[11px] text-slate-300 shadow-sm shadow-slate-900/60">
               <span>Language</span>
@@ -45,23 +45,9 @@ export default function BrandHeader({
               </select>
             </div>
           </div>
-        </div>
 
-        {/* Zeile 2: Navigation */}
-        {/* Desktop: horizontale Buttons */}
-        <nav className="hidden sm:block">
-          <div className="flex flex-wrap justify-center gap-2 text-sm">
-            <NavLink href="/" label={t('navHome')} />
-            <NavLink href="/#tools" label={t('navTools')} />
-            <NavLink href="/impressum" label={t('footerImprint')} />
-            <NavLink href="/datenschutz" label={t('footerPrivacy')} />
-            <NavLink href="/kontakt" label={t('navContact')} />
-          </div>
-        </nav>
-
-        {/* Mobil: Hamburger-Icon rechts + Dropdown */}
-        <div className="sm:hidden">
-          <div className="flex justify-end">
+          {/* Mobil: Hamburger rechts */}
+          <div className="flex sm:hidden justify-end flex-1">
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
@@ -77,8 +63,23 @@ export default function BrandHeader({
               </span>
             </button>
           </div>
+        </div>
 
-          {mobileOpen && (
+        {/* Zeile 2: Navigation */}
+        {/* Desktop: horizontale Buttons */}
+        <nav className="hidden sm:block">
+          <div className="flex flex-wrap justify-center gap-2 text-sm">
+            <NavLink href="/" label={t('navHome')} />
+            <NavLink href="/#tools" label={t('navTools')} />
+            <NavLink href="/impressum" label={t('footerImprint')} />
+            <NavLink href="/datenschutz" label={t('footerPrivacy')} />
+            <NavLink href="/kontakt" label={t('navContact')} />
+          </div>
+        </nav>
+
+        {/* Mobil: Dropdown unter dem Header */}
+        {mobileOpen && (
+          <div className="sm:hidden">
             <div className="mt-2 rounded-2xl border border-slate-800 bg-slate-900/95 shadow-xl shadow-slate-950/60 py-2 text-[12px] text-slate-100">
               <MobileItem href="/" onClick={() => setMobileOpen(false)}>
                 {t('navHome')}
@@ -86,18 +87,24 @@ export default function BrandHeader({
               <MobileItem href="/#tools" onClick={() => setMobileOpen(false)}>
                 {t('navTools')}
               </MobileItem>
-              <MobileItem href="/impressum" onClick={() => setMobileOpen(false)}>
+              <MobileItem
+                href="/impressum"
+                onClick={() => setMobileOpen(false)}
+              >
                 {t('footerImprint')}
               </MobileItem>
-              <MobileItem href="/datenschutz" onClick={() => setMobileOpen(false)}>
+              <MobileItem
+                href="/datenschutz"
+                onClick={() => setMobileOpen(false)}
+              >
                 {t('footerPrivacy')}
               </MobileItem>
               <MobileItem href="/kontakt" onClick={() => setMobileOpen(false)}>
                 {t('navContact')}
               </MobileItem>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Zeile 3: Language mobil – zentriert */}
         <div className="flex justify-center sm:hidden">
