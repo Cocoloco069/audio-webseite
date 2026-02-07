@@ -40,7 +40,8 @@ export default function ImpressumPage() {
         <div className="absolute bottom-[-6rem] right-[-4rem] h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
       </div>
 
-      <BrandHeader lang={lang} setLang={setLang} />
+   <BrandHeader lang={lang} setLang={setLang} t={t} />
+
 
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-5 sm:px-6 sm:py-10">
         <div className="w-full max-w-3xl">
