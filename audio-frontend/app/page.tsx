@@ -122,7 +122,7 @@ export default function Home() {
                     onToast={setToast}
                   />
 
-                  <FaqSection />
+                  <FaqSection t={t} />
                 </>
               ) : (
                 <SoonContent t={t} onBack={() => setActiveTool('silence')} />
