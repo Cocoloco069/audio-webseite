@@ -59,51 +59,40 @@ export default function BrandHeader({
           </div>
         </nav>
 
-        {/* Mobil: „Menü“-Button + Dropdown */}
+        {/* Mobil: Hamburger-Icon rechts + Dropdown */}
         <div className="sm:hidden">
-          <button
-  type="button"
-  onClick={() => setMobileOpen((v) => !v)}
-  className="w-full inline-flex items-center justify-center gap-3 rounded-full border border-slate-700 bg-slate-900/80 px-4 py-2 text-[12px] font-medium text-slate-100 hover:bg-slate-800 transition-colors"
->
-  <span>Menü</span>
-  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800">
-    <span className="flex flex-col gap-[3px]">
-      <span className="block h-[2px] w-4 rounded-full bg-slate-100" />
-      <span className="block h-[2px] w-4 rounded-full bg-slate-100" />
-      <span className="block h-[2px] w-4 rounded-full bg-slate-100" />
-    </span>
-  </span>
-</button>
-
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              className="inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-900/80 p-2 text-slate-100 hover:bg-slate-800 transition-colors"
+              aria-label="Navigation öffnen"
+            >
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800">
+                <span className="flex flex-col gap-[3px]">
+                  <span className="block h-[2px] w-4 rounded-full bg-slate-100" />
+                  <span className="block h-[2px] w-4 rounded-full bg-slate-100" />
+                  <span className="block h-[2px] w-4 rounded-full bg-slate-100" />
+                </span>
+              </span>
+            </button>
+          </div>
 
           {mobileOpen && (
             <div className="mt-2 rounded-2xl border border-slate-800 bg-slate-900/95 shadow-xl shadow-slate-950/60 py-2 text-[12px] text-slate-100">
               <MobileItem href="/" onClick={() => setMobileOpen(false)}>
                 {t('navHome')}
               </MobileItem>
-              <MobileItem
-                href="/#tools"
-                onClick={() => setMobileOpen(false)}
-              >
+              <MobileItem href="/#tools" onClick={() => setMobileOpen(false)}>
                 {t('navTools')}
               </MobileItem>
-              <MobileItem
-                href="/impressum"
-                onClick={() => setMobileOpen(false)}
-              >
+              <MobileItem href="/impressum" onClick={() => setMobileOpen(false)}>
                 {t('footerImprint')}
               </MobileItem>
-              <MobileItem
-                href="/datenschutz"
-                onClick={() => setMobileOpen(false)}
-              >
+              <MobileItem href="/datenschutz" onClick={() => setMobileOpen(false)}>
                 {t('footerPrivacy')}
               </MobileItem>
-              <MobileItem
-                href="/kontakt"
-                onClick={() => setMobileOpen(false)}
-              >
+              <MobileItem href="/kontakt" onClick={() => setMobileOpen(false)}>
                 {t('navContact')}
               </MobileItem>
             </div>
