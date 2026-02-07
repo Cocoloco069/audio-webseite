@@ -38,6 +38,19 @@ export const translations: Record<Lang, Record<string, string>> = {
     soonTitle: 'Weitere Audio-Tools folgen bald',
     soonBody:
       'Hier werden nach und nach weitere KI-Audio-Tools erscheinen – z. B. Noise Cleaner, Loudness-Match für gleich laute Folgen oder ein einfacher Normalizer.',
+    faqTitle: 'Häufige Fragen',
+    faqQ1: 'Was macht der Silence Remover genau?',
+    faqA1:
+      'Das Tool erkennt stille Abschnitte in Sprachaufnahmen und kürzt sie, ohne den gesprochenen Inhalt zu verändern. So wirken Podcasts, Voice-Overs und Interviews flüssiger.',
+    faqQ2: 'Was bedeutet der Regler „Stille reduzieren“?',
+    faqA2:
+      'Je höher der Prozentwert, desto stärker werden Pausen gekürzt. Niedrige Werte lassen mehr Pausen stehen, hohe Werte schneiden sie aggressiver zusammen.',
+    faqQ3: 'Was passiert mit meinen Audiodateien?',
+    faqA3:
+      'Die Datei wird nur verarbeitet, um dir die gekürzte Version als Download bereitzustellen. Sie wird nicht dauerhaft gespeichert oder für andere Zwecke ausgewertet.',
+    faqQ4: 'Welche Dateiformate werden unterstützt?',
+    faqA4:
+      'Gängige Audioformate wie mp3, wav oder m4a, die dein Browser im Datei-Dialog anbietet, bis maximal 50 MB Dateigröße.',
   },
   en: {
     badge: '🎧 AI Audio Tool',
@@ -73,6 +86,19 @@ export const translations: Record<Lang, Record<string, string>> = {
     soonTitle: 'More audio tools are coming soon',
     soonBody:
       'More AI audio tools will appear here soon – for example noise cleaning, loudness matching between episodes, or a simple normalizer.',
+    faqTitle: 'Frequently asked questions',
+    faqQ1: 'What exactly does the silence remover do?',
+    faqA1:
+      'The tool detects silent sections in voice recordings and shortens them without changing the spoken content. This makes podcasts, voice-overs, and interviews feel more fluent.',
+    faqQ2: 'What does the “Reduce silence” slider mean?',
+    faqA2:
+      'The higher the percentage, the more aggressively pauses are shortened. Lower values keep more pauses, higher values cut them tighter.',
+    faqQ3: 'What happens to my audio files?',
+    faqA3:
+      'Your file is only processed to create the trimmed version for download. It is not stored permanently or analyzed for other purposes.',
+    faqQ4: 'Which file formats are supported?',
+    faqA4:
+      'Common audio formats such as mp3, wav, or m4a that your browser offers in the file picker, up to a maximum size of 50 MB.',
   },
   es: {
     badge: '🎧 Herramienta de audio IA',
@@ -108,6 +134,19 @@ export const translations: Record<Lang, Record<string, string>> = {
     soonTitle: 'Pronto habrá más herramientas de audio',
     soonBody:
       'Aquí aparecerán poco a poco nuevas herramientas de IA para audio, como normalizador, coincidencia de loudness o limpiador de ruido.',
+    faqTitle: 'Preguntas frecuentes',
+    faqQ1: '¿Qué hace exactamente el Silence Remover?',
+    faqA1:
+      'La herramienta detecta los silencios en las grabaciones de voz y los acorta sin cambiar el contenido hablado. Así, los pódcasts y locuciones suenan más fluidos.',
+    faqQ2: '¿Qué significa el control «Reducir silencio»?',
+    faqA2:
+      'Cuanto mayor es el porcentaje, más agresivamente se recortan las pausas. Valores bajos dejan más silencios, valores altos los eliminan casi por completo.',
+    faqQ3: '¿Qué pasa con mis archivos de audio?',
+    faqA3:
+      'El archivo solo se procesa para generarte la versión recortada para descargar. No se almacena de forma permanente ni se analiza para otros fines.',
+    faqQ4: '¿Qué formatos de archivo se admiten?',
+    faqA4:
+      'Formatos de audio habituales como mp3, wav o m4a que muestre tu navegador en el selector de archivos, hasta un máximo de 50 MB.',
   },
   fr: {
     badge: '🎧 Outil audio IA',
@@ -143,6 +182,19 @@ export const translations: Record<Lang, Record<string, string>> = {
     soonTitle: 'D’autres outils audio arrivent bientôt',
     soonBody:
       'Cette page deviendra progressivement une petite suite d’outils IA pour l’audio, comme un normaliseur, un ajustement de niveau sonore ou un nettoyeur de bruit.',
+    faqTitle: 'Questions fréquentes',
+    faqQ1: 'Que fait exactement le Silence Remover ?',
+    faqA1:
+      'L’outil détecte les passages silencieux dans les enregistrements vocaux et les raccourcit sans modifier le contenu parlé. Les podcasts et voix-off paraissent ainsi plus fluides.',
+    faqQ2: 'Que signifie le curseur « Réduire les silences » ?',
+    faqA2:
+      'Plus le pourcentage est élevé, plus les pauses sont raccourcies de manière agressive. Des valeurs faibles conservent davantage de silences, des valeurs élevées les réduisent fortement.',
+    faqQ3: 'Que devient mon fichier audio ?',
+    faqA3:
+      'Le fichier est uniquement traité pour te fournir une version raccourcie en téléchargement. Il n’est pas conservé durablement ni analysé à d’autres fins.',
+    faqQ4: 'Quels formats de fichier sont pris en charge ?',
+    faqA4:
+      'Les formats audio courants tels que mp3, wav ou m4a proposés par ton navigateur dans la boîte de dialogue de fichier, jusqu’à une taille maximale de 50 Mo.',
   },
   it: {
     badge: '🎧 Strumento audio IA',
@@ -178,6 +230,19 @@ export const translations: Record<Lang, Record<string, string>> = {
     soonTitle: 'Altri strumenti audio in arrivo',
     soonBody:
       'Qui appariranno gradualmente nuovi strumenti IA per l’elaborazione audio, come normalizzatore, allineamento di loudness o riduzione del rumore.',
+    faqTitle: 'Domande frequenti',
+    faqQ1: 'Che cosa fa esattamente il Silence Remover?',
+    faqA1:
+      'Lo strumento rileva le parti silenziose nelle registrazioni vocali e le accorcia senza modificare il parlato. In questo modo podcast e voice-over risultano più scorrevoli.',
+    faqQ2: 'Cosa significa il cursore «Riduzione del silenzio»?',
+    faqA2:
+      'Più alta è la percentuale, più in modo deciso vengono accorciate le pause. Valori bassi mantengono più silenzi, valori alti li tagliano in modo aggressivo.',
+    faqQ3: 'Che cosa succede ai miei file audio?',
+    faqA3:
+      'Il file viene elaborato solo per creare la versione accorciata da scaricare. Non viene conservato in modo permanente né utilizzato per altri scopi.',
+    faqQ4: 'Quali formati di file sono supportati?',
+    faqA4:
+      'I formati audio più comuni, come mp3, wav o m4a, che il tuo browser mostra nella finestra di selezione dei file, fino a un massimo di 50 MB.',
   },
 };
 
