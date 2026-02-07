@@ -86,7 +86,6 @@ export default function Home() {
 
       <BrandHeader lang={lang} setLang={setLang} t={t} />
 
-
       <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-5 sm:px-6 sm:py-10">
         <div className="w-full max-w-xl sm:max-w-2xl lg:max-w-3xl">
           <div className="mb-4 sm:mb-6 text-center">
@@ -96,14 +95,10 @@ export default function Home() {
           </div>
 
           <div
-  id="tools"
-  className="rounded-3xl bg-gradient-to-br from-indigo-500/40 via-sky-500/20 to-transparent p-[1px] shadow-2xl shadow-indigo-950/60 transform-gpu transition-transform duration-300 md:hover:scale-[1.01]"
->
-  <section className="bg-slate-900/95 rounded-3xl border border-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-7">
-    ...
-  </section>
-</div>
-
+            id="tools"
+            className="rounded-3xl bg-gradient-to-br from-indigo-500/40 via-sky-500/20 to-transparent p-[1px] shadow-2xl shadow-indigo-950/60 transform-gpu transition-transform duration-300 md:hover:scale-[1.01]"
+          >
+            <section className="bg-slate-900/95 rounded-3xl border border-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-7">
               <ToolTabs
                 activeTool={activeTool}
                 setActiveTool={setActiveTool}
