@@ -189,7 +189,6 @@ const translations: Record<Lang, Record<string, string>> = {
   },
 };
 
-// "aufnahme.mp3" -> "aufnahme_edited.mp3"
 function buildEditedFileName(originalName: string): string {
   const dotIndex = originalName.lastIndexOf('.');
   if (dotIndex === -1) {
@@ -330,26 +329,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-indigo-950 text-slate-50 flex flex-col relative overflow-hidden">
-      {/* weicher Farb-Glow im Hintergrund */}
       <div className="pointer-events-none absolute inset-0 opacity-40">
         <div className="absolute -top-40 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/30 blur-3xl" />
         <div className="absolute bottom-[-6rem] right-[-4rem] h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
       </div>
 
-      {/* Branding + Language-Switcher */}
       <header className="relative z-10 px-4 pt-4 sm:px-8 sm:pt-6">
         <div className="flex w-full items-center gap-3">
-          {/* Wortlogo links */}
           <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-100">
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-[13px] shadow-md shadow-indigo-700/60">
               🎧
             </span>
-            <span className="tracking-tight">
-              Audio Tools
-            </span>
+            <span className="tracking-tight">Audio Tools</span>
           </div>
-
-          {/* Language-Switcher, auf Mobile zentriert */}
           <div className="flex-1 flex justify-center sm:justify-end">
             <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/80 border border-slate-800/80 px-2.5 py-1 text-[10px] sm:text-[11px] text-slate-300 shadow-sm shadow-slate-900/60">
               <span>Language</span>
@@ -377,39 +369,37 @@ export default function Home() {
             </span>
           </div>
 
-          {/* Card mit Gradient-Rand + Hover-Scale auf Desktop */}
-          <div className="flex justify-center mb-3 sm:mb-4">
-  <div className="inline-flex items-center rounded-full bg-slate-900/80 border border-slate-800/80 p-1 text-[11px] sm:text-xs">
-    <button
-      type="button"
-      onClick={() => setActiveTool('silence')}
-      className={
-        'px-3 sm:px-4 py-1 rounded-full font-medium transition-colors ' +
-        (activeTool === 'silence'
-          ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/60'
-          : 'text-slate-300 hover:text-slate-50 hover:bg-slate-800/80')
-      }
-    >
-      {t('tabSilence')}
-    </button>
+          <div className="rounded-3xl bg-gradient-to-br from-indigo-500/40 via-sky-500/20 to-transparent p-[1px] shadow-2xl shadow-indigo-950/60 transform-gpu transition-transform duration-300 md:hover:scale-[1.01]">
+            <section className="bg-slate-900/95 rounded-3xl border border-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-10 space-y-6 sm:space-y-7">
+              <div className="flex justify-center mb-3 sm:mb-4">
+                <div className="inline-flex items-center rounded-full bg-slate-900/80 border border-slate-800/80 p-1 text-[11px] sm:text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTool('silence')}
+                    className={
+                      'px-3 sm:px-4 py-1 rounded-full font-medium transition-colors ' +
+                      (activeTool === 'silence'
+                        ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/60'
+                        : 'text-slate-300 hover:text-slate-50 hover:bg-slate-800/80')
+                    }
+                  >
+                    {t('tabSilence')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTool('soon')}
+                    className={
+                      'px-3 sm:px-4 py-1 rounded-full font-medium transition-colors ' +
+                      (activeTool === 'soon'
+                        ? 'bg-slate-800 text-slate-50 shadow-sm shadow-slate-900/50'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/80')
+                    }
+                  >
+                    {t('tabSoon')}
+                  </button>
+                </div>
+              </div>
 
-    <button
-      type="button"
-      onClick={() => setActiveTool('soon')}
-      className={
-        'px-3 sm:px-4 py-1 rounded-full font-medium transition-colors ' +
-        (activeTool === 'soon'
-          ? 'bg-slate-800 text-slate-50 shadow-sm shadow-slate-900/50'
-          : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/80')
-      }
-    >
-      {t('tabSoon')}
-    </button>
-  </div>
-</div>
-
-
-              {/* Header je nach aktivem Tool */}
               {activeTool === 'silence' ? (
                 <header className="space-y-2 text-center max-w-2xl mx-auto">
                   <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
@@ -540,7 +530,7 @@ export default function Home() {
 
               {activeTool === 'soon' && (
                 <div className="pt-2 text-center text-xs sm:text-sm text-slate-300">
-                  {/* aktuell nur Infotext – hier können später neue Tools rein */}
+                  {/* hier kommen später neue Tools rein */}
                 </div>
               )}
             </section>
