@@ -1,109 +1,74 @@
-// app/datenschutz/page.tsx
 'use client';
 
+import { useEffect, useState } from 'react';
+import {
+  Lang,
+  TFunc,
+  supportedLangs,
+  translations,
+} from '../i18n/translations';
+import BrandHeader from '../components/BrandHeader';
+import Footer from '../components/Footer';
+
 export default function DatenschutzPage() {
+  const [lang, setLang] = useState<Lang>('de');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = window.localStorage.getItem('audioToolsLang');
+      if (stored && supportedLangs.includes(stored as Lang)) {
+        setLang(stored as Lang);
+      }
+    }
+  }, []);
+
+  const t: TFunc = (key, vars) => {
+    let text = translations[lang][key];
+    if (vars) {
+      Object.entries(vars).forEach(([k, v]) => {
+        text = text.replace(`{${k}}`, v);
+      });
+    }
+    return text;
+  };
+
   return (
-    <main className="min-h-screen p-8 max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Datenschutzerklärung</h1>
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-950 to-indigo-950 text-slate-50 flex flex-col relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 opacity-40">
+        <div className="absolute -top-40 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-indigo-500/30 blur-3xl" />
+        <div className="absolute bottom-[-6rem] right-[-4rem] h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
+      </div>
 
-      <section className="space-y-2 mb-6">
-        <h2 className="text-xl font-semibold">1. Verantwortlicher</h2>
-        <p>
-          Verantwortlich für die Datenverarbeitung auf dieser Website ist:
-          <br />
-          Max Mustermann
-          <br />
-          Musterstraße 1
-          <br />
-          12345 Musterstadt
-          <br />
-          Deutschland
-          <br />
-          E-Mail:{' '}
-          <a href="mailto:info@example.com" className="text-blue-600 underline">
-            info@example.com
-          </a>
-        </p>
-      </section>
+      <BrandHeader lang={lang} setLang={setLang} />
 
-      <section className="space-y-2 mb-6">
-        <h2 className="text-xl font-semibold">2. Bereitstellung der Website und Server-Logfiles</h2>
-        <p>
-          Beim Aufruf dieser Website werden durch den Webserver automatisch Informationen erfasst,
-          die Ihr Browser übermittelt. Dazu gehören insbesondere IP-Adresse, Datum und Uhrzeit des
-          Abrufs, aufgerufene URL, übertragene Datenmenge, Referrer-URL, verwendeter Browser und
-          Betriebssystem.
-        </p>
-        <p>
-          Die Datenverarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO zur
-          Sicherstellung des technischen Betriebs, zur Fehleranalyse und zum Schutz vor
-          Missbrauchs- bzw. Angriffsversuchen.
-        </p>
-        <p>
-          Die Server-Logfiles werden in der Regel nur kurzfristig gespeichert und anschließend
-          gelöscht, soweit keine längere Aufbewahrung aus Sicherheits- oder Beweisgründen
-          erforderlich ist.
-        </p>
-      </section>
+      <main className="relative z-10 flex-1 flex items-center justify-center px-4 py-5 sm:px-6 sm:py-10">
+        <div className="w-full max-w-3xl">
+          <div className="rounded-3xl bg-gradient-to-br from-indigo-500/40 via-sky-500/20 to-transparent p-[1px] shadow-2xl shadow-indigo-950/60">
+            <section className="bg-slate-900/95 rounded-3xl border border-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-10 space-y-4 sm:space-y-6">
+              <header className="space-y-2">
+                <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+                  Datenschutz
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-400">
+                  Informationen zur Verarbeitung personenbezogener Daten.
+                </p>
+              </header>
 
-      <section className="space-y-2 mb-6">
-        <h2 className="text-xl font-semibold">3. Verarbeitung hochgeladener Audiodateien</h2>
-        <p>
-          Für die Nutzung des Audio-Stille-Entferners können Sie Audiodateien hochladen. Die
-          verarbeiteten Dateien werden ausschließlich zur technischen Durchführung der
-          gewünschten Bearbeitung verwendet.
-        </p>
-        <p>
-          Die Dateien werden nach Abschluss der Verarbeitung bzw. innerhalb eines kurzen,
-          technisch erforderlichen Zeitraums automatisch gelöscht und nicht dauerhaft gespeichert
-          oder zu anderen Zwecken genutzt.
-        </p>
-        <p>
-          Rechtsgrundlage für die Verarbeitung ist Art. 6 Abs. 1 lit. b DSGVO (Erfüllung eines
-          Vertrags bzw. vorvertraglicher Maßnahmen).
-        </p>
-      </section>
+              <div className="space-y-3 text-xs sm:text-sm text-slate-200">
+                <p>Hier kannst du deine Datenschutzerklärung einfügen.</p>
+                <p>
+                  Zum Beispiel:
+                  <br />
+                  Verantwortliche Stelle, erhobene Daten, Zwecke, Rechtsgrundlagen,
+                  Speicherdauer, Rechte der Betroffenen (Auskunft, Löschung, etc.).
+                </p>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
 
-      <section className="space-y-2 mb-6">
-        <h2 className="text-xl font-semibold">4. Empfänger der Daten / Auftragsverarbeiter</h2>
-        <p>
-          Zum Hosting und zur Bereitstellung dieser Anwendung werden Dienste von Drittanbietern
-          genutzt (z.&nbsp;B. Vercel für das Frontend und Railway für das Backend). Mit diesen
-          Dienstleistern bestehen Auftragsverarbeitungsverträge gemäß Art. 28 DSGVO, soweit
-          erforderlich.
-        </p>
-      </section>
-
-      <section className="space-y-2 mb-6">
-        <h2 className="text-xl font-semibold">5. Speicherdauer</h2>
-        <p>
-          Soweit in dieser Erklärung nicht anders angegeben, werden personenbezogene Daten nur so
-          lange gespeichert, wie es für die jeweiligen Zwecke erforderlich ist oder wie es
-          gesetzliche Aufbewahrungsfristen vorsehen.
-        </p>
-      </section>
-
-      <section className="space-y-2 mb-6">
-        <h2 className="text-xl font-semibold">6. Ihre Rechte</h2>
-        <p>
-          Sie haben im Rahmen der gesetzlichen Vorgaben das Recht auf Auskunft, Berichtigung,
-          Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit sowie Widerspruch gegen
-          bestimmte Verarbeitungen personenbezogener Daten.
-        </p>
-        <p>
-          Hierzu sowie zu weiteren Fragen zum Datenschutz können Sie sich jederzeit an die oben
-          genannten Kontaktdaten wenden.
-        </p>
-      </section>
-
-      <section className="space-y-2 text-sm text-gray-600">
-        <h2 className="text-lg font-semibold">7. Hinweis</h2>
-        <p>
-          Diese Datenschutzerklärung stellt keine Rechtsberatung dar. Für eine rechtssichere
-          Ausgestaltung sollten Sie im Zweifel eine Rechtsanwältin oder einen spezialisierten
-          Dienstleister konsultieren.
-        </p>
-      </section>
-    </main>
+      <Footer t={t} />
+    </div>
   );
 }
