@@ -16,6 +16,7 @@ import Toast from './components/Toast';
 
 import SilenceRemoverTool from './features/silence/SilenceRemoverTool';
 import SoonContent from './features/soon/SoonContent';
+import FaqSection from './components/FaqSection';
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>('de');
@@ -120,6 +121,8 @@ export default function Home() {
                     isIOS={isIOS}
                     onToast={setToast}
                   />
+
+                  <FaqSection />
                 </>
               ) : (
                 <SoonContent t={t} onBack={() => setActiveTool('silence')} />
