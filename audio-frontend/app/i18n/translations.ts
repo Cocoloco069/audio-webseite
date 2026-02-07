@@ -35,10 +35,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     footerPrivacy: 'Datenschutz',
     tabSilence: 'Silence Remover',
     tabSoon: 'Weitere Tools (bald)',
-        navHome: 'Startseite',
+    navHome: 'Startseite',
     navTools: 'Tools',
     navContact: 'Kontakt',
-
     soonTitle: 'Weitere Audio-Tools folgen bald',
     soonBody:
       'Hier werden nach und nach weitere KI-Audio-Tools erscheinen – z. B. Noise Cleaner, Loudness-Match für gleich laute Folgen oder ein einfacher Normalizer.',
@@ -87,10 +86,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     footerPrivacy: 'Privacy',
     tabSilence: 'Silence Remover',
     tabSoon: 'More tools (soon)',
-        navHome: 'Home',
+    navHome: 'Home',
     navTools: 'Tools',
     navContact: 'Contact',
-
     soonTitle: 'More audio tools are coming soon',
     soonBody:
       'More AI audio tools will appear here soon – for example noise cleaning, loudness matching between episodes, or a simple normalizer.',
@@ -139,10 +137,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     footerPrivacy: 'Privacidad',
     tabSilence: 'Silence Remover',
     tabSoon: 'Más herramientas (pronto)',
-        navHome: 'Inicio',
+    navHome: 'Inicio',
     navTools: 'Herramientas',
     navContact: 'Contacto',
-
     soonTitle: 'Pronto habrá más herramientas de audio',
     soonBody:
       'Aquí aparecerán poco a poco nuevas herramientas de IA para audio, como normalizador, coincidencia de loudness o limpiador de ruido.',
@@ -191,10 +188,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     footerPrivacy: 'Confidentialité',
     tabSilence: 'Silence Remover',
     tabSoon: 'Plus d’outils (bientôt)',
-        navHome: 'Accueil',
+    navHome: 'Accueil',
     navTools: 'Outils',
     navContact: 'Contact',
-
     soonTitle: 'D’autres outils audio arrivent bientôt',
     soonBody:
       'Cette page deviendra progressivement une petite suite d’outils IA pour l’audio, comme un normaliseur, un ajustement de niveau sonore ou un nettoyeur de bruit.',
@@ -243,10 +239,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     footerPrivacy: 'Privacy',
     tabSilence: 'Silence Remover',
     tabSoon: 'Altri strumenti (presto)',
-        navHome: 'Home',
+    navHome: 'Home',
     navTools: 'Strumenti',
     navContact: 'Contatto',
-
     soonTitle: 'Altri strumenti audio in arrivo',
     soonBody:
       'Qui appariranno gradualmente nuovi strumenti IA per l’elaborazione audio, come normalizzatore, allineamento di loudness o riduzione del rumore.',
